@@ -7,6 +7,7 @@ export const dynamicRouteMap = {
   ROLES: () => import('@/views/ExampleView.vue'),
   USERS: () => import('@/views/ExampleView.vue'),
   PERMISSIONS: () => import('@/views/ExampleView.vue'),
+  LOGS_LAYOUT: () => import('@/components/LogsLayout.vue'),
   LOGIN_LOGS: () => import('@/views/ExampleView.vue'),
   OPERATION_LOGS: () => import('@/views/ExampleView.vue'),
   ERROR_LOGS: () => import('@/views/ExampleView.vue'),

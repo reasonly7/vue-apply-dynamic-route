@@ -9,6 +9,6 @@ export const login = async () => {
 
 export const logout = () => {
   accessToken.value = ''
-  router.clearRoutes()
+  // router.clearRoutes()
   console.log('Log out', router.getRoutes())
 }
