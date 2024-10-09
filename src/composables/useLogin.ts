@@ -1,21 +1,14 @@
-// import { getPermissionTree } from '@/api'
 import { router } from '@/router'
 import { useLocalStorage } from '@vueuse/core'
 
-export const isLogin = useLocalStorage<boolean>('isLogin', false)
+export const accessToken = useLocalStorage<string>('access_token', '')
 
-const _setIsLogin = (status: boolean) => {
-  isLogin.value = status
-}
-
-export const login = () => {
-  _setIsLogin(true)
-  // const data = await getPermissionTree()
-
-  router.replace('/home')
+export const login = async () => {
+  accessToken.value = 'Bearer xxx'
 }
 
 export const logout = () => {
-  _setIsLogin(false)
-  router.replace('/login')
+  accessToken.value = ''
+  router.clearRoutes()
+  console.log('Log out', router.getRoutes())
 }

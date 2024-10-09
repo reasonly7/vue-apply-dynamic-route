@@ -1,72 +1,96 @@
-type TreeItem =
+import { dynamicRouteMap } from '@/router/dynamicRouteMap'
+
+export type RouteName = keyof typeof dynamicRouteMap
+
+export type ResourceTreeItem =
   | {
       type: 'page'
-      title: string
       path: string
-      code: string
-      invisible?: boolean
-      children?: {
-        type: 'page'
-        title: string
-        path: string
-        code: string
-        invisible: true
-      }[]
+      name: RouteName
+      meta: { title: string }
     }
-  | { type: 'link'; title: string; url: string }
-  | { type: 'group'; title: string; children: TreeItem[] }
+  | {
+      type: 'layout'
+      path: string
+      name: RouteName
+      redirect: string
+      children: ResourceTreeItem[]
+      meta: { title: string }
+    }
 
-const mockData: TreeItem[] = [
-  { type: 'page', title: 'Dashboard', path: '/dashboard', code: 'DASHBOARD' },
-  { type: 'page', title: 'Notes', path: '/note', code: 'NOTES', children: [] }, // here
-  { type: 'link', title: 'Google', url: 'https://www.google.com/' },
+const mockData: ResourceTreeItem[] = [
   {
-    type: 'group',
-    title: 'System',
+    type: 'layout',
+    name: 'USER_LAYOUT',
+    path: '/user-layout',
+    redirect: '/dashboard',
+    meta: { title: 'User Layout' },
     children: [
       {
         type: 'page',
-        title: 'Positions',
-        path: '/sys/positions',
-        code: 'POSITIONS',
+        path: '/dashboard',
+        name: 'DASHBOARD',
+        meta: { title: 'Dashboard' },
       },
-      { type: 'page', title: 'Roles', path: '/sys/roles', code: 'ROLES' },
-      { type: 'page', title: 'Users', path: '/sys/users', code: 'USERS' },
       {
         type: 'page',
-        title: 'Permissions',
-        path: '/sys/permissions',
-        code: 'PERMISSIONS',
+        path: '/note',
+        name: 'NOTES',
+        meta: { title: 'Notes' },
       },
       {
-        type: 'group',
-        title: 'Logs',
-        children: [
-          {
-            type: 'page',
-            title: 'Login Logs',
-            path: '/sys/login-logs',
-            code: 'LOGIN_LOGS',
-          },
-          {
-            type: 'page',
-            title: 'Operation Logs',
-            path: '/sys/operation-logs',
-            code: 'OPERATION_LOGS',
-          },
-          {
-            type: 'page',
-            title: 'Error Logs',
-            path: '/sys/error-logs',
-            code: 'ERROR_LOGS',
-          },
-        ],
+        type: 'page',
+        path: '/note/:id',
+        name: 'NOTE_DETAIL',
+        meta: { title: 'Note Detail' },
+      },
+      {
+        type: 'page',
+        path: '/sys/positions',
+        name: 'POSITIONS',
+        meta: { title: 'Positions' },
+      },
+      {
+        type: 'page',
+        path: '/sys/roles',
+        name: 'ROLES',
+        meta: { title: 'Roles' },
+      },
+      {
+        type: 'page',
+        path: '/sys/users',
+        name: 'USERS',
+        meta: { title: 'Users' },
+      },
+      {
+        type: 'page',
+        path: '/sys/permissions',
+        name: 'PERMISSIONS',
+        meta: { title: 'Permissions' },
+      },
+      {
+        type: 'page',
+        path: '/sys/login-logs',
+        name: 'LOGIN_LOGS',
+        meta: { title: 'Login Logs' },
+      },
+      {
+        type: 'page',
+        path: '/sys/operation-logs',
+        name: 'OPERATION_LOGS',
+        meta: { title: 'Operation Logs' },
+      },
+      {
+        type: 'page',
+        path: '/sys/error-logs',
+        name: 'ERROR_LOGS',
+        meta: { title: 'Error Logs' },
       },
     ],
   },
 ]
 
-export const getDynamicRoute = () => {
+export const getResourceTree: () => Promise<ResourceTreeItem[]> = () => {
   return new Promise((resolve) => {
     resolve(mockData)
   })
