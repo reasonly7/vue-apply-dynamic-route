@@ -1,18 +1,21 @@
-import { dynamicRouteMap } from '@/router/dynamicRouteMap'
+import { DynamicRouteName } from '@/router/dynamicRouteMap'
 
-export type RouteName = keyof typeof dynamicRouteMap
+export const enum ResourceType {
+  page = 'page',
+  layout = 'layout',
+}
 
 export type ResourceTreeItem =
   | {
-      type: 'page'
+      type: ResourceType.page
       path: string
-      name: RouteName
+      name: DynamicRouteName
       meta: { title: string }
     }
   | {
-      type: 'layout'
+      type: ResourceType.layout
       path: string
-      name: RouteName
+      name: DynamicRouteName
       redirect: string
       children: ResourceTreeItem[]
       meta: { title: string }
@@ -20,77 +23,77 @@ export type ResourceTreeItem =
 
 const mockData: ResourceTreeItem[] = [
   {
-    type: 'layout',
-    name: 'USER_LAYOUT',
-    path: '/user-layout',
+    type: ResourceType.layout,
+    name: DynamicRouteName.UserLayout,
+    path: '',
     redirect: '/dashboard',
     meta: { title: 'User Layout' },
     children: [
       {
-        type: 'page',
+        type: ResourceType.page,
         path: '/dashboard',
-        name: 'DASHBOARD',
+        name: DynamicRouteName.Dashboard,
         meta: { title: 'Dashboard' },
       },
       {
-        type: 'page',
-        path: '/note',
-        name: 'NOTES',
+        type: ResourceType.page,
+        path: '/notes',
+        name: DynamicRouteName.Notes,
         meta: { title: 'Notes' },
       },
       {
-        type: 'page',
+        type: ResourceType.page,
         path: '/note/:id',
-        name: 'NOTE_DETAIL',
+        name: DynamicRouteName.NoteDetail,
         meta: { title: 'Note Detail' },
       },
       {
-        type: 'page',
+        type: ResourceType.page,
         path: '/sys/positions',
-        name: 'POSITIONS',
+        name: DynamicRouteName.Positions,
         meta: { title: 'Positions' },
       },
       {
-        type: 'page',
+        type: ResourceType.page,
         path: '/sys/roles',
-        name: 'ROLES',
+        name: DynamicRouteName.Roles,
         meta: { title: 'Roles' },
       },
       {
-        type: 'page',
+        type: ResourceType.page,
         path: '/sys/users',
-        name: 'USERS',
+        name: DynamicRouteName.Users,
         meta: { title: 'Users' },
       },
       {
-        type: 'page',
+        type: ResourceType.page,
         path: '/sys/permissions',
-        name: 'PERMISSIONS',
+        name: DynamicRouteName.Permissions,
         meta: { title: 'Permissions' },
       },
       {
-        type: 'layout',
-        name: 'LOGS_LAYOUT',
-        path: '/logs-layout',
+        type: ResourceType.layout,
+        name: DynamicRouteName.LogsLayout,
+        path: '',
         redirect: '/sys/login-logs',
         meta: { title: 'User Layout' },
         children: [
           {
-            type: 'page',
+            type: ResourceType.page,
             path: '/sys/login-logs',
-            name: 'LOGIN_LOGS',
+            name: DynamicRouteName.LoginLogs,
             meta: { title: 'Login Logs' },
           },
           {
-            type: 'page',
+            type: ResourceType.page,
             path: '/sys/operation-logs',
-            name: 'OPERATION_LOGS',
+            name: DynamicRouteName.OperationLogs,
             meta: { title: 'Operation Logs' },
           },
           {
-            type: 'page',
+            type: ResourceType.page,
             path: '/sys/error-logs',
-            name: 'ERROR_LOGS',
+            name: DynamicRouteName.ErrorLogs,
             meta: { title: 'Error Logs' },
           },
         ],
@@ -99,8 +102,10 @@ const mockData: ResourceTreeItem[] = [
   },
 ]
 
-export const getResourceTree: () => Promise<ResourceTreeItem[]> = () => {
-  return new Promise((resolve) => {
-    resolve(mockData)
-  })
+export const resourceApi = {
+  getTree() {
+    return new Promise<ResourceTreeItem[]>((resolve) => {
+      resolve(mockData)
+    })
+  },
 }

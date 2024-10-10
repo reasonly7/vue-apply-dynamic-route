@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { logout } from '@/composables/useLogin'
 import { router } from '@/router'
 import { dynamicRouteMap } from '@/router/dynamicRouteMap'
 
@@ -17,7 +18,7 @@ const navigate = (page: string) => {
     </aside>
     <main>
       <header>
-        <button>Log out</button>
+        <button @click="logout">Log out</button>
       </header>
       <div class="view-wrapper">
         <RouterView></RouterView>

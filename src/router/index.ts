@@ -1,28 +1,39 @@
 import BaseLayout from '@/components/BaseLayout.vue'
-import { accessToken } from '@/composables/useLogin'
 import LoginView from '@/views/LoginView.vue'
-import NotFoundView from '@/views/NotFoundView.vue'
 import { createRouter, createWebHistory } from 'vue-router'
+import * as dynamicRoutes from '@/composables/useDynamicRoutes'
+import { isLogin } from '@/composables/useLogin'
+
+export const enum StaticRouteName {
+  BaseLayout = 'BaseLayout',
+  Login = 'Login',
+  NotFound = 'NotFound',
+}
 
 export const router = createRouter({
   history: createWebHistory(),
   routes: [
     {
       path: '',
-      name: 'BASE_LAYOUT',
+      name: StaticRouteName.BaseLayout,
       component: BaseLayout,
-      redirect: '/login',
+      redirect: { name: StaticRouteName.Login },
       children: [
-        { path: '/login', name: 'LOGIN', component: LoginView },
-        { path: '/:pathMatch(.*)*', name: 'NotFound', component: NotFoundView },
+        { path: '/login', name: StaticRouteName.Login, component: LoginView },
       ],
     },
   ],
 })
 
-router.beforeEach((to) => {
-  if (to.name !== 'LOGIN' && !accessToken.value) {
-    return { name: 'LOGIN' }
+router.beforeEach(async (to) => {
+  if (isLogin.value) {
+    if (!dynamicRoutes.isReady.value) {
+      await dynamicRoutes.init()
+      return { ...to, replace: true }
+    }
+  } else {
+    if (to.name !== StaticRouteName.Login) {
+      return { name: StaticRouteName.Login }
+    }
   }
-  return
 })
